@@ -35,22 +35,24 @@ public:
         rgbpcl = PointCloudRGB::Ptr(new PointCloudRGB);
         rgbpcl->header.frame_id = "tf_frame_1";
         rgbpcl->height = graypcl->width = 1;
-
         i = 0;
         }
 
     void pushbackTutorial(){
-    pcl::PointXYZRGB rgbpoint;
-            rgbpoint.x = float(-i);
-            rgbpoint.y = float(-i);
-            rgbpoint.z = float(-i);
-            rgbpoint.r = i*10;
-            rgbpoint.g = 0;
-            rgbpoint.b = 255 -i*10;
-            graypcl->points.push_back(pcl::PointXYZ(float(i),float(i),float(i)));
-            rgbpcl->points.push_back(rgbpoint);
-            i++;
-            std::cout<<i<<std::endl;
+        pcl::PointXYZRGB rgbpoint;
+        graypcl->resize(i+1);
+        rgbpcl->resize(i+1);
+        rgbpoint.x = float(-i);
+        rgbpoint.y = float(-i);
+        rgbpoint.z = float(-i);
+        rgbpoint.r = i*10;
+        rgbpoint.g = 0;
+        rgbpoint.b = 255 -i*10;
+        graypcl->points.push_back(pcl::PointXYZ(float(i),float(i),float(i)));
+        //graypcl->points.push_back(pcl::PointXYZ(float(i+1),float(i+1),float(i+1)));
+        rgbpcl->points.push_back(rgbpoint);
+        i++;
+        std::cout<<i<<std::endl;
         if(i==20){
         graypcl->points.clear();
         rgbpcl->points.clear();
@@ -63,10 +65,10 @@ public:
     }
 
     void spin(){
-        pcl_conversions::toPCL(ros::Time::now(), graypcl->header.stamp);
-        pcl_conversions::toPCL(ros::Time::now(), rgbpcl->header.stamp);
         ros::Rate r(3);
         while(ros::ok()){
+            pcl_conversions::toPCL(ros::Time::now(), graypcl->header.stamp);
+            pcl_conversions::toPCL(ros::Time::now(), rgbpcl->header.stamp);
             pushbackTutorial();
             r.sleep();
             ros::spinOnce();
