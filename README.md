@@ -3,7 +3,7 @@ detection team's pcl tutorial pkg
 
 # how to use
 
-package.xml and CMakelist is ready to build source file using opencv and pcl
+package.xml and CMakelist is ready to build source file using opencv and pcl in ubuntu 18.04 & ubuntu 20.04
 
 you may need to install opencv library to use opencv things (opencv need to be installed before installing ros)
 
