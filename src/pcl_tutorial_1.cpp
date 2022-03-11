@@ -5,8 +5,8 @@
 #include <pcl/conversions.h>
 #include <pcl_ros/point_cloud.h>
 
-typedef pcl::PointCloud<pcl::PointXYZ> PointCloud;
-typedef pcl::PointCloud<pcl::PointXYZRGB> PointCloudRGB;
+typedef pcl::PointCloud<pcl::PointXYZ> PointCloud; //PointXYZ를 Point로 쓰는 PointCloud
+typedef pcl::PointCloud<pcl::PointXYZRGB> PointCloudRGB; //PointXYZRGB를 point로 쓰는 PointCloud
 
 class pcl_tutorial_1{
 
@@ -21,11 +21,8 @@ private:
 
 public:
     pcl_tutorial_1(){
-        graypclPub = nh.advertise<PointCloud> ("point2",100);
-        RGBpclPub = nh.advertise<PointCloudRGB> ("rgbpoint2",100);
-
-        graypcl.reset(new PointCloud);
-        rgbpcl.reset(new PointCloudRGB);
+        graypclPub = nh.advertise<PointCloud> ("point2",100); //PointXYZ Publisher
+        RGBpclPub = nh.advertise<PointCloudRGB> ("rgbpoint2",100); //PointXYZRGB Publisher
 
         graypcl = PointCloud::Ptr(new PointCloud);
         graypcl->header.frame_id = "tf_frame_1";
@@ -40,7 +37,7 @@ public:
 
     void pushbackTutorial(){
         pcl::PointXYZRGB rgbpoint;
-        graypcl->resize(i+1);
+        graypcl->resize(i+1); //Point Cloud의 Point 수 확대
         rgbpcl->resize(i+1);
         rgbpoint.x = float(-i);
         rgbpoint.y = float(-i);
@@ -48,18 +45,17 @@ public:
         rgbpoint.r = i*10;
         rgbpoint.g = 0;
         rgbpoint.b = 255 -i*10;
-        graypcl->points.push_back(pcl::PointXYZ(float(i),float(i),float(i)));
-        //graypcl->points.push_back(pcl::PointXYZ(float(i+1),float(i+1),float(i+1)));
+        graypcl->points.push_back(pcl::PointXYZ(float(i),float(i),float(i))); //Point 삽입
         rgbpcl->points.push_back(rgbpoint);
         i++;
         std::cout<<i<<std::endl;
         if(i==20){
-        graypcl->points.clear();
+        graypcl->points.clear(); //i가 20이 될때마다 Poitnt Cloud 리셋
         rgbpcl->points.clear();
         i=0;
         }
         else{
-        graypclPub.publish(graypcl);
+        graypclPub.publish(graypcl); //Point Cloud Publish
         RGBpclPub.publish(rgbpcl);
         }
     }
